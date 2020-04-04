@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,39 +16,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cursos.app.model.Alumno;
-import com.cursos.app.service.IAlumnoService;
+import com.cursos.app.model.Usuario;
+import com.cursos.app.service.IUsuarioService;
 
 @RestController
-@RequestMapping("/alumnos")
-public class AlumnoController {
+@RequestMapping("/usuarios")
+public class UsuarioController {
 
 	@Autowired
-	private IAlumnoService service;
+	private IUsuarioService service;
+	
+	@Autowired
+	private BCryptPasswordEncoder bcrypt;
 
 	@PostMapping
-	public ResponseEntity<Alumno> registrar(@RequestBody Alumno alumno) {
-		Alumno al = service.registrar(alumno);
-		return new ResponseEntity<Alumno>(al, HttpStatus.CREATED);
+	public ResponseEntity<Object> registrar(@RequestBody Usuario usuario) {
+		
+		usuario.setPass(bcrypt.encode(usuario.getPass()));
+		
+		service.registrar(usuario);
+		return new ResponseEntity<Object>(HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<Alumno>modificar(@RequestBody Alumno alumno){
-		Alumno al = service.modificar(alumno);
-		return new ResponseEntity<Alumno>(al, HttpStatus.OK);
+	public ResponseEntity<Usuario>modificar(@RequestBody Usuario usuario){
+		Usuario al = service.modificar(usuario);
+		return new ResponseEntity<Usuario>(al, HttpStatus.OK);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Alumno>> listar() {
-		List<Alumno> ls = service.listar();
-		return new ResponseEntity<List<Alumno>>(ls, HttpStatus.OK);
+	public ResponseEntity<List<Usuario>> listar() {
+		List<Usuario> ls = service.listar();
+		return new ResponseEntity<List<Usuario>>(ls, HttpStatus.OK);
 
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Alumno> listarPorId(@PathVariable("id") Integer id){
-		Alumno al = service.listarPorId(id);
-		return new ResponseEntity<Alumno>(al, HttpStatus.OK);
+	public ResponseEntity<Usuario> listarPorId(@PathVariable("id") Integer id){
+		Usuario al = service.listarPorId(id);
+		return new ResponseEntity<Usuario>(al, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
