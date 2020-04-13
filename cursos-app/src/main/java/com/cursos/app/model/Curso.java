@@ -19,6 +19,9 @@ public class Curso {
 	
 	@Column(name = "nombre", nullable = false, length = 100)
 	private String nombre;
+	
+	@Column(name = "url_imagen", length = 1000)
+	private String urlImagen;
 
 	@Column(name = "fechaInicio")
 	private LocalDateTime fechaInicio;
@@ -80,6 +83,20 @@ public class Curso {
 	 */
 	public void setFechaFin(LocalDateTime fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+
+	/**
+	 * @return the urlImagen
+	 */
+	public String getUrlImagen() {
+		return urlImagen;
+	}
+
+	/**
+	 * @param urlImagen the urlImagen to set
+	 */
+	public void setUrlImagen(String urlImagen) {
+		this.urlImagen = urlImagen;
 	}
 	
 	
